@@ -20,12 +20,22 @@ def update():
         number = input("Please enter the new phone number:")
         phone_book[nama] = number
         pickle.dump(phone_book, open( "phone.p", "wb" ) )
+def printing():
+    phone_book = pickle.load( open( "phone.p", "rb" ) )
+    phonelist = list(phone_book.items())
+    print(phonelist)
+    print("Name\t|Phone Number")
+    print("-"*21)
+    for name,number in phonelist:
+        print("{0}\t|{1}".format(name,number))
 
-command = input("What would you like to do?")
+command = input("What would you like to do? (press Enter to terminate)")
 while command:
     if "add" in command.lower():
         add()
     elif "update" in command.lower():
         update()
-    command = input("What would you like to do?")
+    elif "print" in command.lower():
+        printing()
+    command = input("What would you like to do? (press Enter to terminate)")
     
