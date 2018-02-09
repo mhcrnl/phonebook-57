@@ -1,22 +1,23 @@
 import pickle
 phone_book = pickle.load( open( "phone.p", "rb" ) )
 def add(nama=None):
-    print(phone_book)
     if not nama:
-        nama = input("Name? ")
+        nama = input("Insert name: ")
     if nama not in phone_book:
-        number = input("Phone number? ")
+        number = input("Please enter", nama + "'s phone number: ")
         phone_book[nama] = number
+        pickle.dump(phone_book, open( "phone.p", "wb" ) )
+        print(nama, "is successfully added into the phonebook.")
     elif nama in phone_book:
         print ("Name already existed. The number is " + phone_book[nama])
-    pickle.dump(phone_book, open( "phone.p", "wb" ) )
+   
 def update():
-    nama = input("Name? ")
+    nama = input("Insert name: ")
     if nama not in phone_book:
         print(nama, "doesn't exist yet. \nAdding", nama, "into the phone book.")
         add(nama)
     elif nama in phone_book:
-        print("Name found.")
+        print("Name found. The existing number is " + phone_book[nama])
         number = input("Please enter the new phone number:")
         phone_book[nama] = number
         pickle.dump(phone_book, open( "phone.p", "wb" ) )
@@ -38,4 +39,3 @@ while command:
     elif "print" in command.lower():
         printing()
     command = input("What would you like to do? (press Enter to terminate)")
-    
