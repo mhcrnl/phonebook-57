@@ -4,7 +4,7 @@ def add(nama=None):
     if not nama:
         nama = input("Insert name: ")
     if nama not in phone_book:
-        number = input("Please enter", nama + "'s phone number: ")
+        number = input("Please enter"+ nama + "'s phone number: ")
         phone_book[nama] = number
         pickle.dump(phone_book, open( "phone.p", "wb" ) )
         print(nama, "is successfully added into the phonebook.")
