@@ -35,7 +35,13 @@ def printing():
     if not phonelist:
         print("None\t|None")
 
-
+def delete(nama):
+    #delete a contact.
+    try:
+        del phone_book[nama]
+        pickle.dump(phone_book, open( "phone.p", "wb" ) )
+    except KeyError:
+        print(nama,"does not exist in the phone book.")
 def delete_all():
     #delete all contacts.
     phone_book = {}
@@ -47,10 +53,25 @@ def help():
     print("Press Enter to terminate.")
     print("'add' to add a new contact.")
     print("'update' to update a contact's number.")
+    print("'search' to search through the contact list.")
     print("'delete' to delete a contact.")
     print("'delete all' to delete all contacts.")
 command = input("What would you like to do? (press Enter to terminate)\nType 'help' to display all commands.\n")
 
+def search():
+    keyword = input("Insert name: ")
+    name_array = []
+    counter = 1
+    print("No.\t|Name\t\t|Phone Number")
+    for name in phone_book:
+        if keyword in name:
+            name_array.append(name)
+            print("{0}.\t|{1}\t|{2}".format(counter,name,phone_book[name]))
+            counter = counter + 1
+    return name_array
+
+def blackout():
+    pass
 while command:
     #run the selected function.
     if "add" in command.lower():
@@ -59,14 +80,21 @@ while command:
         update()
     elif "print" in command.lower():
         printing()
-    elif "delete all" in command.lower():
-        answer = input('Are you sure (Y/N): ')
-        if answer.upper() == 'Y':
-            delete_all()
-            print("Restarting.\nPlease re-run the program.")
-            break
+    elif "delete" in command.lower():
+        if "all" in command.lower():
+            answer = input('Are you sure (Y/N): ')
+            if answer.upper() == 'Y':
+                delete_all()
+                print("Restarting.\nPlease re-run the program.")
+                break
+        else:
+            nama = input("Insert name: ")
+            delete(nama)
     elif "help" in command.lower():
         help()
-
+    elif "search" in command.lower():
+        search()
+    elif "b" in command.lower():
+        blackout()
     command = input("What would you like to do? (press Enter to terminate) ")
 
