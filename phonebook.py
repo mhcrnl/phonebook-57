@@ -4,7 +4,7 @@ def add(nama=None):
     if not nama:
         nama = input("Insert name: ")
     if nama not in phone_book:
-        number = input("Please enter"+ nama + "'s phone number: ")
+        number = input("Please enter "+ nama + "'s phone number: ")
         phone_book[nama] = number
         pickle.dump(phone_book, open( "phone.p", "wb" ) )
         print(nama, "is successfully added into the phonebook.")
@@ -21,6 +21,7 @@ def update():
         number = input("Please enter the new phone number:")
         phone_book[nama] = number
         pickle.dump(phone_book, open( "phone.p", "wb" ) )
+        
 def printing():
     phone_book = pickle.load( open( "phone.p", "rb" ) )
     phonelist = list(phone_book.items())
@@ -30,6 +31,12 @@ def printing():
     for name,number in phonelist:
         print("{0}\t|{1}".format(name,number))
 
+def delete_all():
+    phone_book = {}
+    pickle.dump(phone_book, open( "phone.p", "wb" ) )
+    printing()
+
+
 command = input("What would you like to do? (press Enter to terminate)")
 while command:
     if "add" in command.lower():
@@ -38,4 +45,7 @@ while command:
         update()
     elif "print" in command.lower():
         printing()
+    elif "delete all" in command.lower():
+        delete_all()
     command = input("What would you like to do? (press Enter to terminate)")
+
