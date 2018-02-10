@@ -28,20 +28,31 @@ def printing():
     #print all contacts and their phone numbers.
     phone_book = pickle.load( open( "phone.p", "rb" ) )
     phonelist = list(phone_book.items())
-    print(phonelist)
     print("Name\t|Phone Number")
     print("-"*21)
     for name,number in phonelist:
         print("{0}\t|{1}".format(name,number))
+    if not phonelist:
+        print("None\t|None")
+
 
 def delete_all():
     #delete all contacts.
     phone_book = {}
     pickle.dump(phone_book, open( "phone.p", "wb" ) )
-    printing()    
+    printing()
 
-command = input("What would you like to do? (press Enter to terminate)")
+def help():
+    #display instructions to users.
+    print("Press Enter to terminate.")
+    print("'add' to add a new contact.")
+    print("'update' to update a contact's number.")
+    print("'delete' to delete a contact.")
+    print("'delete all' to delete all contacts.")
+command = input("What would you like to do? (press Enter to terminate)\nType 'help' to display all commands.\n")
+
 while command:
+    #run the selected function.
     if "add" in command.lower():
         add()
     elif "update" in command.lower():
@@ -50,5 +61,8 @@ while command:
         printing()
     elif "delete all" in command.lower():
         delete_all()
+    elif "help" in command.lower():
+        help()
+
     command = input("What would you like to do? (press Enter to terminate)")
 
