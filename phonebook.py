@@ -1,13 +1,22 @@
 import pickle
+email_attributes = ["@", ".", ".com"]
 phone_book = pickle.load( open( "phone.p", "rb" ) )
+def insert(nama, number, email = None):
+    #insert into phone book
+    while ( "+" not in number or not (number[1:].isdigit()) or not (11 <= len(number) <= 13) ):
+        number = input("Please reenter the number")
+    data = [number, email]
+    phone_book[nama] = data
+    pickle.dump(phone_book, open( "phone.p", "wb" ) )
+
 def add(nama=None):
     #add a new contact.
     if not nama:
         nama = input("Insert name: ")
     if nama not in phone_book:
         number = input("Please enter "+ nama + "'s phone number: ")
-        phone_book[nama] = number
-        pickle.dump(phone_book, open( "phone.p", "wb" ) )
+        email = input("Please enter "+ nama + "'s email: ")
+        insert(nama, number, email)
         print(nama, "is successfully added into the phonebook.")
     elif nama in phone_book:
         print ("Name already existed. The number is " + phone_book[nama])
@@ -21,8 +30,7 @@ def update():
     elif nama in phone_book:
         print("Name found. The existing number is " + phone_book[nama])
         number = input("Please enter the new phone number:")
-        phone_book[nama] = number
-        pickle.dump(phone_book, open( "phone.p", "wb" ) )
+        insert(nama, number)
         
 def printing():
     #print all contacts and their phone numbers.
