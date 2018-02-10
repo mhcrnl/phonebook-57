@@ -60,9 +60,13 @@ while command:
     elif "print" in command.lower():
         printing()
     elif "delete all" in command.lower():
-        delete_all()
+        answer = input('Are you sure (Y/N): ')
+        if answer.upper() == 'Y':
+            delete_all()
+            print("Restarting.\nPlease re-run the program.")
+            break
     elif "help" in command.lower():
         help()
 
-    command = input("What would you like to do? (press Enter to terminate)")
+    command = input("What would you like to do? (press Enter to terminate) ")
 
