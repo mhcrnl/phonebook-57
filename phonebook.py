@@ -1,6 +1,5 @@
 #Created by Gilbert Vincenta
 import pickle
-from prettytable import PrettyTable
 EMAIL_PRESENCE = ["@", "."]
 EMAIL_ATTRIBUTES = "ABCDEFGHIJKLMNOPQRTSUVWXYZ@.1234567890" #based on Gmail's rule of email account's name.
 phone_book = pickle.load( open( "phone.p", "rb" ) )
@@ -79,7 +78,7 @@ def printing():
 def delete(nama):
     #delete a contact.
     try:
-        del phone_book[nama]
+        del phone_book[nama.lower()]
         pickle.dump(phone_book, open( "phone.p", "wb" ) )
     except KeyError:
         print(nama,"does not exist in the phone book.")
@@ -103,15 +102,16 @@ def search():
     keyword = input("Insert name: ")
     name_array = []
     counter = 1
-    print("No.\t|Name\t\t|Phone Number")
+    print("No.\tName\t[Phone Number, email]")
     for name in phone_book:
-        if keyword in name:
+        if keyword.lower() in name:
             name_array.append(name)
             print("{0}.\t|{1}\t|{2}".format(counter,name,phone_book[name]))
             counter += 1
-    return name_array
+    return name_array #in case if it will be used for other functions
 
 def blackout():
+    #suddenly give you a black-screen for some privacy.
     pass
 while command:
     #run the selected function.
