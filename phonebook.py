@@ -1,5 +1,7 @@
 #Created by Gilbert Vincenta
 import pickle
+from prettytable import PrettyTable
+EMAIL_PRESENCE = ["@", "."]
 EMAIL_ATTRIBUTES = "ABCDEFGHIJKLMNOPQRTSUVWXYZ@.1234567890" #based on Gmail's rule of email account's name.
 phone_book = pickle.load( open( "phone.p", "rb" ) )
 def verify_email(email):
@@ -8,55 +10,71 @@ def verify_email(email):
     while alpha:
         for char in email:
             if char.upper() not in EMAIL_ATTRIBUTES:
+                #check for invalid characters
+                email = input("Please re-enter the email: ")
+                re_enter = True
+                break
+        for entity in EMAIL_PRESENCE:
+            if entity not in email:
                 email = input("Please re-enter the email: ")
                 re_enter = True
                 break
         if not re_enter:
             alpha = False
-
+        else:
+            re_enter = False
+    return email
 def insert(nama, number, email = None):
     #insert into phone book.
     while ( "+" not in number or not (number[1:].isdigit()) or not (11 <= len(number) <= 13) ): #phone number verification
         number = input("Please re-enter the number: ")
-    verify_email(email)
+    email = verify_email(email)
     data = [number, email]
-    phone_book[nama] = data
+    phone_book[nama.lower()] = data
     pickle.dump(phone_book, open( "phone.p", "wb" ) )
 
 def add(nama=None):
     #add a new contact.
     if not nama:
         nama = input("Insert name: ")
-    if nama not in phone_book:
+    if nama.lower() not in phone_book:
         number = input("Please enter "+ nama + "'s phone number: ")
         email = input("Please enter "+ nama + "'s email: ")
         insert(nama, number, email)
         print(nama, "is successfully added into the phonebook.")
-    elif nama in phone_book:
-        print ("Name already existed. The number is " + phone_book[nama][0] + " and the email is " + phone_book[nama][1])
+        print(phone_book)
+    elif nama.lower() in phone_book:
+        nama = nama.lower()
+        print ("Name already existed. The number is " + phone_book[nama][0] + " and the email is " + phone_book[nama][1], ".")
    
 def update():
     #update contact's number.
     nama = input("Insert name: ")
-    if nama not in phone_book:
+    if nama.lower() not in phone_book:
         print(nama, "doesn't exist yet.\nAdding", nama, "into the phone book.")
         add(nama)
-    elif nama in phone_book:
-        print("Name found. The existing number is " + phone_book[nama][0])
-        print("The existing email is " + phone_book[nama][1])
-        number = input("Please enter the new phone number:")
-        insert(nama, number)
+    elif nama.lower() in phone_book:
+        nama = nama.lower()
+        print("Name found. The existing number is " + phone_book[nama][0] + ".")
+        print("The existing email is " + phone_book[nama][1], ".")
+        number = input("Please enter the new phone number: ")
+        email = input("Please enter the new email: ")
+        insert(nama, number, email)
         
 def printing():
     #print all contacts and their phone numbers.
+    print("Name\t\t[Phone Number, Email]")
+    print("-"*26)
     phone_book = pickle.load( open( "phone.p", "rb" ) )
-    phonelist = list(phone_book.items())
-    print("Name\t|Phone Number")
-    print("-"*21)
-    for name,number in phonelist:
-        print("{0}\t|{1}".format(name,number))
-    if not phonelist:
-        print("None\t|None")
+    if not phone_book:
+        #prints none if there is phonelist is empty
+        print("None\t\tNone")
+    else:
+        phonelist = list(phone_book.items())
+        for name,number in phonelist:
+            name = " ".join(char.capitalize() for char in name.split())
+            print("{0}\t\t{1}".format(name,number))
+
 
 def delete(nama):
     #delete a contact.
