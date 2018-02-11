@@ -1,10 +1,24 @@
+#Created by Gilbert Vincenta
 import pickle
-email_attributes = ["@", ".", ".com"]
+EMAIL_ATTRIBUTES = "ABCDEFGHIJKLMNOPQRTSUVWXYZ@.1234567890" #based on Gmail's rule of email account's name.
 phone_book = pickle.load( open( "phone.p", "rb" ) )
+def verify_email(email):
+    alpha = True
+    re_enter = False
+    while alpha:
+        for char in email:
+            if char.upper() not in EMAIL_ATTRIBUTES:
+                email = input("Please re-enter the email: ")
+                re_enter = True
+                break
+        if not re_enter:
+            alpha = False
+
 def insert(nama, number, email = None):
-    #insert into phone book
-    while ( "+" not in number or not (number[1:].isdigit()) or not (11 <= len(number) <= 13) ):
-        number = input("Please reenter the number")
+    #insert into phone book.
+    while ( "+" not in number or not (number[1:].isdigit()) or not (11 <= len(number) <= 13) ): #phone number verification
+        number = input("Please re-enter the number: ")
+    verify_email(email)
     data = [number, email]
     phone_book[nama] = data
     pickle.dump(phone_book, open( "phone.p", "wb" ) )
@@ -19,16 +33,17 @@ def add(nama=None):
         insert(nama, number, email)
         print(nama, "is successfully added into the phonebook.")
     elif nama in phone_book:
-        print ("Name already existed. The number is " + phone_book[nama])
+        print ("Name already existed. The number is " + phone_book[nama][0])
    
 def update():
     #update contact's number.
     nama = input("Insert name: ")
     if nama not in phone_book:
-        print(nama, "doesn't exist yet. \nAdding", nama, "into the phone book.")
+        print(nama, "doesn't exist yet.\nAdding", nama, "into the phone book.")
         add(nama)
     elif nama in phone_book:
-        print("Name found. The existing number is " + phone_book[nama])
+        print("Name found. The existing number is " + phone_book[nama][0])
+        print("The existing email is " + phone_book[nama][0])
         number = input("Please enter the new phone number:")
         insert(nama, number)
         
@@ -75,7 +90,7 @@ def search():
         if keyword in name:
             name_array.append(name)
             print("{0}.\t|{1}\t|{2}".format(counter,name,phone_book[name]))
-            counter = counter + 1
+            counter += 1
     return name_array
 
 def blackout():
