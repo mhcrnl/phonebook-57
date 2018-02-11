@@ -33,7 +33,7 @@ def add(nama=None):
         insert(nama, number, email)
         print(nama, "is successfully added into the phonebook.")
     elif nama in phone_book:
-        print ("Name already existed. The number is " + phone_book[nama][0])
+        print ("Name already existed. The number is " + phone_book[nama][0] + " and the email is " + phone_book[nama][1])
    
 def update():
     #update contact's number.
@@ -43,7 +43,7 @@ def update():
         add(nama)
     elif nama in phone_book:
         print("Name found. The existing number is " + phone_book[nama][0])
-        print("The existing email is " + phone_book[nama][0])
+        print("The existing email is " + phone_book[nama][1])
         number = input("Please enter the new phone number:")
         insert(nama, number)
         
